@@ -1,8 +1,10 @@
 //estudo de Builder Pattern
 package org.example;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
 
         // Construção do objeto usando Builder
         Student student = new Student.StudentBuilder("12345", "Leticia")
@@ -17,6 +19,63 @@ public class Main {
         System.out.println("Série: " + student.getSerie());
     }
 
+        public class SistemaMenu{
+            public static void main(String [] args){
+                Scanner scan = new Scanner(System.in);
+                int opcao = 0;
+                //opções de menu: anexar/ atualizar/ excluir/ solicitar mediação
+                do {
+                    System.out.println("Bem vindo ao menu, escolha a ação necessária:");
+
+                    System.out.println("1. Anexar");
+                    System.out.println("2. Atualizar");
+                    System.out.println("3. Excluir");
+                    System.out.println("4. Solicitar mediação");
+                    System.out.println("Digite o numero da opção escolhida: ");
+
+                    //Leitura da opção
+                    opcao = scan.nextInt();
+
+                    //Processando opção escolhida
+                    switch (opcao) {
+                        case 1:
+                            System.out.println("Opção 1 selecionada: Anexar estudante.");
+                            //método para anexar estudante
+                            addStudent();
+                            break;
+                        case 2:
+                            System.out.println("Opção 2 selecionada: Atualizar dados do estudante.");
+                            // método para atualizar estudante
+                            updateStudent();
+                            break;
+                        case 3:
+                            System.out.println("Opção 3 selecionada: Excluir dados do estudante.");
+                            //método para excluir dados do estudante
+                            deleteStudent();
+                            break;
+                        case 4:
+                            System.out.println("Opção 4 selecionada: Solicitar mediação sobre estudante.");
+                            // método solicitando mediação
+                            mediationStudent();
+                            break;
+                    }
+                }while (opcao != 0);
+                System.out.println("Você está encerrando o menu.");
+                scan.close();
+            }
+            public static void addStudent(){
+
+            }
+            public static void updateStudent(){
+
+            }
+            public static void deleteStudent(){
+
+            }
+            public static void mediationStudent(){
+
+            }
+        }
     static class Student {
         //Atributos
         private final String ra, name;
