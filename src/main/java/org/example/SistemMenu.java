@@ -60,8 +60,7 @@ public class SistemMenu{
             String city = scan.nextLine();
 
             System.out.print("Digite a série do aluno: ");
-            int serie = scan.nextInt();
-            scan.nextLine();
+            String serie = scan.nextLine();
 
             System.out.print("Digite a turma do aluno: ");
             String group = scan.nextLine();
@@ -85,7 +84,10 @@ public class SistemMenu{
                     .group(group)
                     .fone(fone)
                     .build();
+
             //Exibindo informações
+                System.out.println();
+                System.out.println("Dados do aluno: ");
             System.out.println("RA: " + student.getRa());
             System.out.println("Nome: " + student.getName());
             System.out.println("Cidade: " + student.getCity());

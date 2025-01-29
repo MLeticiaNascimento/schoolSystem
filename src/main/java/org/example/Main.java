@@ -15,8 +15,8 @@ class Student {
         //Atributos
         private final String ra, name;
         private final int cpf, dateBirth, fone;
-        private String city, group;
-        private int serie;
+        private String city, serie, group;
+
 
 
         //Construtor privado para impedir criação direta, não é acessado pelo cliente
@@ -37,7 +37,7 @@ class Student {
         public int getCpf() {return cpf;}
         public int getDateBirth() {return dateBirth;}
         public String getCity() { return city;}
-        public int getSerie() {return serie;}
+        public String getSerie() {return serie;}
         public String getGroup() {return group;}
         public int getFone() { return fone;}
 
@@ -45,10 +45,10 @@ class Student {
         //Classe Builder interna
         public static class StudentBuilder {
             private final String ra, name; //obrigatórios
-            private final int dateBirth, cpf;
-            private int fone=0; // obrigatórios
-            private String city, group;
-            private int serie;
+            private final int dateBirth, cpf; // obrigatório
+            private int fone=0;
+            private String city, serie, group;
+
 
 
             //Construtor do Builder define a obrigatoriedade
@@ -78,19 +78,15 @@ class Student {
                 return this;
             }
 
-            public StudentBuilder serie(int serie) {
+            public StudentBuilder serie(String serie) {
                 this.serie = serie;
-
                 return this;
             }
             public StudentBuilder group (String group) {
-                this.group = null;
+                this.group = group;
                 return this;
             }
-            public StudentBuilder cpf(int cpf) {
-                //verificar se o cpf é valido
 
-            }
 
             public StudentBuilder fone(int fone) {
                 this.fone = fone;
