@@ -1,8 +1,13 @@
 package org.example;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import org.example.exceptions.MissingRequiredFieldException;
+import org.example.validator.NameValidator;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 public class SystemMenu{
@@ -60,6 +65,14 @@ public class SystemMenu{
             System.out.print("Digite o nome do aluno: ");
             String name = scan.nextLine();
 
+                try{
+                    NameValidator.isFullNameValidator(name);
+                    System.out.println("Nome válido: " + name);
+
+                }catch(MissingRequiredFieldException e){
+                    System.out.println("Erro: "+ e.getMessage());
+                }
+               
             System.out.print("Digite a cidade do aluno: ");
             String city = scan.nextLine();
 
@@ -69,44 +82,51 @@ public class SystemMenu{
             System.out.print("Digite a turma do aluno: ");
             String team = scan.nextLine();
 
+            //chamar classe cpfValidator
             System.out.print("Digite o CPF do aluno: ");
-            int cpf = scan.nextInt();
-            scan.nextLine();
+            String cpf = scan.nextLine();
+            
 
             System.out.print("Digite a data de nascimento do aluno: ");
-            int dateBirth = scan.nextInt();
-            scan.nextLine();
+            String dateBirthStr = scan.nextLine();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate dateBirth = LocalDate.parse(dateBirthStr, formatter);
+            
 
             System.out.print("Digite o telefone do aluno(somente numeros): ");
-            int fone = scan.nextInt();
-            scan.nextLine();
+            String fone = scan.nextLine();
+            
 
-            //Criar o estudante
-            Student student = new Student.StudentBuilder(ra,name, cpf,dateBirth)
-                    .city(city)
-                    .serie(serie)
-                    .team(team)
-                    .fone(fone)
-                    .build();
+            
+                         
 
-            //inserindo o aluno no banco de dados
-            try{
+                //Inserindo no banco de dados
+                try{
+                Student student = new Student.StudentBuilder(ra,name, cpf, dateBirthStr)
+                        .city(city)
+                        .serie(serie)
+                        .team(team)
+                        .fone(fone)  
+                        .build();
+
                 //StudentDAO studentDAO = new StudentDAO();
                 StudentDAO.insertStudent(student);
-                System.out.println("Aluno cadastrado com sucesso");
-            }catch (SQLException e) {
-                System.out.println("Erro ao inserir novo aluno: "+e.getMessage());
-            }
+                System.out.println("Aluno cadastrado com sucesso!");
+            
 
-            //Exibindo informações
-                System.out.println();
-                System.out.println("Dados do aluno: ");
+                //Exibindo informações
+            System.out.println();
+            System.out.println("Dados do aluno: ");
             System.out.println("RA: " + student.getRa());
             System.out.println("Nome: " + student.getName());
             System.out.println("Cidade: " + student.getCity());
             System.out.println("Série: " + student.getSerie() + student.getTeam());
+                }catch(SQLException e){
+                    System.out.println("Erro ao inserir no banco de dados: " + e.getMessage());
+                }
 
-            }
+              
+        }
 
             public static void updateStudent(){
 

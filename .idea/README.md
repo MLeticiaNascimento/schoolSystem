@@ -1,3 +1,18 @@
 Estrutura do sistema
 
-1. Menu
+Menu
+
+Banco de dados:
+ESCOLA
+table students
+id 
+ra  
+name 
+cpf 
+dateBirth 
+fone 
+city 
+serie 
+team
+
+

@@ -3,6 +3,7 @@ package org.example;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Date;
 
 public class StudentDAO {
     public StudentDAO() {}
@@ -17,9 +18,12 @@ public class StudentDAO {
                 //substitui os "?" pelos valores reais
                 stmt.setString(1, student.getRa());
                 stmt.setString(2, student.getName());
-                stmt.setInt(3, student.getCpf());
-                stmt.setInt(4, student.getDateBirth());
-                stmt.setInt(5, student.getFone());
+                stmt.setString(3, student.getCpf());
+
+                //Converte LocalDate para Date
+                stmt.setDate(4,Date.valueOf(student.getDateBirth()));
+
+                stmt.setString(5, student.getFone());
                 stmt.setString(6, student.getCity());
                 stmt.setString(7, student.getSerie());
                 stmt.setString(8, student.getTeam());
