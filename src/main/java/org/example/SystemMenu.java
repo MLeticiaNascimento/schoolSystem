@@ -1,10 +1,17 @@
 package org.example;
 
+import org.example.StudentDAO;
+import org.example.Student;
+
+import org.example.exceptions.InvalidCpfException;
+import org.example.exceptions.MissingRequiredFieldException;
+
+import org.example.validator.NameValidator;
+import org.example.validator.CpfValidator;
+
+
 import java.sql.SQLException;
 import java.util.Scanner;
-
-import org.example.exceptions.MissingRequiredFieldException;
-import org.example.validator.NameValidator;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -59,46 +66,89 @@ public class SystemMenu{
                 }
 
             private static void addStudent(Scanner scan, StudentDAO studentDAO) {
-            System.out.print("Digite o RA(Registro do aluno): ");
-            String ra = scan.nextLine();
+                //add Registro do aluno(RA)
+                String ra = null;
+                boolean raValido = false;
 
-            System.out.print("Digite o nome do aluno: ");
-            String name = scan.nextLine();
+                while(!raValido){
+                System.out.print("Digite o RA(Registro do aluno): ");
+                ra = scan.nextLine();
+                
+                try {
+                    if (ra == null || ra.trim().isEmpty()){
+                        throw new MissingRequiredFieldException("O RA não pode estar vazio.");
+                    }
+                        raValido = true;
+                        System.out.println("RA do estudante: " + ra);    
 
-                try{
-                    NameValidator.isFullNameValidator(name);
-                    System.out.println("Nome válido: " + name);
+                    } catch(MissingRequiredFieldException e){
+                        System.out.println("Erro: " + e.getMessage());
+                        System.out.println("Por favor, tente novamente.");
+                    }
 
-                }catch(MissingRequiredFieldException e){
-                    System.out.println("Erro: "+ e.getMessage());
                 }
-               
-            System.out.print("Digite a cidade do aluno: ");
-            String city = scan.nextLine();
 
-            System.out.print("Digite a série do aluno: ");
-            String serie = scan.nextLine();
+                //add nome
+                String name = null;
+                boolean ValidName = false;         
 
-            System.out.print("Digite a turma do aluno: ");
-            String team = scan.nextLine();
+                while(!ValidName){
+                        System.out.print("Digite o nome do aluno: ");
+                        name = scan.nextLine();
+                        try{
+                            NameValidator.isFullNameValidator(name);
+                            ValidName = true;
+                            System.out.println("Nome válido: " + name);
 
-            //chamar classe cpfValidator
-            System.out.print("Digite o CPF do aluno: ");
-            String cpf = scan.nextLine();
-            
+                        }catch(MissingRequiredFieldException e){
+                        System.out.println("Erro: "+ e.getMessage());
+                        System.out.println("Por favor, tente novamente.");
+                        }
+                    }
+                //add cidade  
+                System.out.print("Digite a cidade do aluno: ");
+                String city = scan.nextLine();
 
-            System.out.print("Digite a data de nascimento do aluno: ");
-            String dateBirthStr = scan.nextLine();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate dateBirth = LocalDate.parse(dateBirthStr, formatter);
-            
+                //add serie
+                System.out.print("Digite a série do aluno: ");
+                String serie = scan.nextLine();
 
-            System.out.print("Digite o telefone do aluno(somente numeros): ");
-            String fone = scan.nextLine();
-            
+                //add turma
+                System.out.print("Digite a turma do aluno: ");
+                String team = scan.nextLine();
 
-            
-                         
+                //add cpf
+                String cpf = null;
+                boolean validCpf = false;
+
+                while (!validCpf){
+
+                    System.out.print("Digite o CPF do aluno: ");
+                    cpf = scan.nextLine();
+
+                    try{
+                        CpfValidator.validarCpf(cpf);
+                        validCpf = true;
+                        System.out.println("CPF valido: " + cpf);
+                        } catch (InvalidCpfException e){
+                                System.out.println("Erro: "+ e.getMessage());
+                                System.out.println("Por favor, digite o CPF novamente. ");
+                        }
+                    }
+
+
+                // add data de nascimento
+                System.out.print("Digite a data de nascimento do aluno: ");
+                String dateBirthStr = scan.nextLine();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate dateBirth = LocalDate.parse(dateBirthStr, formatter);
+
+
+                //add telefone
+                System.out.print("Digite o telefone do aluno(somente numeros): ");
+                String fone = scan.nextLine();
+
+
 
                 //Inserindo no banco de dados
                 try{
@@ -124,7 +174,6 @@ public class SystemMenu{
                 }catch(SQLException e){
                     System.out.println("Erro ao inserir no banco de dados: " + e.getMessage());
                 }
-
               
         }
 

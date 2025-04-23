@@ -4,9 +4,9 @@ import org.example.exceptions.InvalidCpfException;
 
 public class CpfValidator {
     
-    public static void isValidCpf(String cpf) throws InvalidCpfException{
+    public static void  validarCpf(String cpf) throws InvalidCpfException{
         
-        cpf = cpf.replaceAll("^\\d]", "");
+        cpf = cpf.replaceAll("[^0-9]", "");
 
         if(cpf.length () != 11){
             throw new InvalidCpfException("CPF deve conter 11 dígitos.");
@@ -30,7 +30,7 @@ public class CpfValidator {
         soma = 0;
         for(int i = 0; i < 10; i++){
             soma += Character.getNumericValue(cpf.charAt(i))*(11 - i);
-            
+        }
         int segundoDigito = 11 -( soma%11);
         if (segundoDigito >= 10) segundoDigito = 0;
         
@@ -39,4 +39,3 @@ public class CpfValidator {
             }
         }   
     }
-}
