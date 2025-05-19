@@ -1,16 +1,29 @@
 package com.schoolApplication.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+
+
+@Entity
 public class Student {
-        //Atributos
-        private final String ra, name;
+
+        @Id
+        @Column(unique=true, nullable = false)
+
+        private String ra, name, cpf, fone, city, serie, team;
         private LocalDate dateBirth;
-        private String cpf, fone, city, serie, team;
+        
+        //construtor
+        public Student(){
 
-
+        }
 
         //Construtor privado para impedir criação direta, não é acessado pelo cliente
         private Student(StudentBuilder builder) {

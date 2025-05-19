@@ -2,24 +2,36 @@ package com.schoolApplication.menu;
 
 import com.schoolApplication.repository.StudentDAO;
 import com.schoolApplication.model.*;
+import com.schoolApplication.dto.RequestDto;
 import com.schoolApplication.exceptions.*;
 import com.schoolApplication.validator.*;
+import com.schoolApplication.service.*;
 
 import java.sql.SQLException;
 import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 
+@Component  
 public class SystemMenu{
 
-            public static void menu() {
+    @Autowired
+    private StudentService studentService;
+
+         
+    public void menu() {
                 Scanner scan = new Scanner(System.in);
+
                 StudentDAO studentDAO = new StudentDAO();
 
                 int opcao = 0;
-                //opções de menu: anexar/ atualizar/ excluir/ solicitar mediação
-
+              
                 System.out.println("Bem vindo ao menu, escolha a ação necessária:");
                 System.out.println("1. Anexar");
                 System.out.println("2. Atualizar");
@@ -28,7 +40,7 @@ public class SystemMenu{
                 System.out.println("5. Sair");
                 System.out.println("Digite o numero da opção escolhida: ");
 
-                //Leitura da opção
+                
                 opcao = scan.nextInt();
                 scan.nextLine();
 
@@ -50,9 +62,10 @@ public class SystemMenu{
                         deleteStudent();
                         break;
                     case 4:
-                        System.out.println("Opção 4 selecionada: Solicitar mediação sobre estudante.");
+                        System.out.println("Opção 4 selecionada: Solicitar mediação para estudante.");
                         // método solicitando mediação
-                        mediationStudent();
+                        mediationStudent(scan, studentService);
+
                         break;
                     default:
                         System.out.println("Você está encerrando o menu.");
@@ -179,9 +192,63 @@ public class SystemMenu{
 
 
             }
-            public static void mediationStudent(){
+        @Autowired
+        private EmailService emailService;
+
+            public void mediationStudent(Scanner scan, StudentService studentService){
+
+                System.out.println("Solicitação de Mediação.");
+
+                System.out.println("Por favor, digite a sua matrícula: ");
+                    String license = scan.nextLine();
+                
+               
+
+                System.out.println("Digite o RA(Registro do Aluno):");
+                    String ra = scan.nextLine();
+                
+                System.out.println("Buscando perfil do estudante.   ");
+
+                    try{
+                        Student student = studentService.searchStudentByRa(ra);    
+
+                        System.out.println("Você deseja fazer a solicitação para este estudante? Digite 'SIM' para confirmar ou 'NÃO' para cancelar.");
+                        System.out.println("Nome: "+ student.getName());
+                        System.out.println("RA: " + student.getRa());
+                        System.out.println("Turma: " + student.getSerie() + " " + student.getTeam());
+    
+                       String confirm = scan.nextLine();
+
+                       if(confirm.equalsIgnoreCase("SIM")){
+                        System.out.println("Por favor digite o motivo da solicitação e as ações já realizadas: ");
+                            String reason = scan.nextLine();
+   
+                            System.out.println("Digite seu e-mail:");
+                                String email = scan.nextLine();
+   
+                            RequestDto dto = new RequestDto(
+                            student.getName(),
+                            email,
+                            license,                             
+                            " Solicitação de mediação para o estudante: " + student.getName() + 
+                            "\nRA: " + student.getRa() + 
+                            "\nMotivo: " + reason + 
+                            "\nSolicitante: " + license
+                            );
+                    
+                            emailService.sendEmail(dto);
+
+                            System.out.println("SolicitaÇÃO ENVIADA COM SUCESSO!");
+                        } else{
+                                System.out.println("Solicitação cancelada");
+                        }
+                        
+                        }catch(RuntimeException e){
+                            System.out.println("Erro: " + e.getMessage());
+                        }
+
+                    }
 
             }
 
-    }
-
+            

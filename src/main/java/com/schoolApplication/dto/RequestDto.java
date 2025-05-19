@@ -7,7 +7,11 @@ public class RequestDto{
     private String license;
     private String msg;
 
-    public RequestDto(){}
+    public RequestDto(){
+        
+    }
+
+    public RequestDto(String name, String email, String license, String msg){}
 
     //Nome
     public String getName(){

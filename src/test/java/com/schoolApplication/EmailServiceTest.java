@@ -25,7 +25,7 @@ public class EmailServiceTest {
 
         emailService.sendEmail(request);
 
-        System.out.println("Email enviado com sucesso! ");
+        System.out.println("TESTE de envio de email realizaod com sucesso! ");
          
     } 
 }
