@@ -7,15 +7,17 @@ import com.schoolApplication.exceptions.*;
 import com.schoolApplication.validator.*;
 import com.schoolApplication.service.*;
 
+
 import java.sql.SQLException;
 import java.util.Scanner;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+import java.time.format.DateTimeParseException;
 
 
 @Component  
@@ -24,14 +26,17 @@ public class SystemMenu{
     @Autowired
     private StudentService studentService;
 
-         
+    @Autowired
+    private StudentDAO studentDAO;
+
+   
     public void menu() {
                 Scanner scan = new Scanner(System.in);
-
-                StudentDAO studentDAO = new StudentDAO();
-
+                
+                
                 int opcao = 0;
               
+            while(true){
                 System.out.println("Bem vindo ao menu, escolha a ação necessária:");
                 System.out.println("1. Anexar");
                 System.out.println("2. Atualizar");
@@ -40,9 +45,13 @@ public class SystemMenu{
                 System.out.println("5. Sair");
                 System.out.println("Digite o numero da opção escolhida: ");
 
-                
-                opcao = scan.nextInt();
-                scan.nextLine();
+                try{
+                    opcao = Integer.parseInt(scan.nextLine());
+                    scan.nextLine();
+                }catch (NumberFormatException e){
+                    System.out.println("Opção inválida. Por favor Digite um dos números do Menu.");
+                    continue;
+                }
 
                 //Processando opção escolhida
                 switch (opcao) {
@@ -53,8 +62,10 @@ public class SystemMenu{
                         break;
                     case 2:
                         System.out.println("Opção 2 selecionada: Atualizar dados do estudante.");
-                        // método para atualizar estudante
-                        updateStudent();
+                        System.out.println("Digite o RA do estudante");
+                        String ra = scan.nextLine();
+                        Student student = studentService.searchStudentByRa(ra);
+                        updateStudent(scan, student, this.studentDAO);
                         break;
                     case 3:
                         System.out.println("Opção 3 selecionada: Excluir dados do estudante.");
@@ -65,12 +76,17 @@ public class SystemMenu{
                         System.out.println("Opção 4 selecionada: Solicitar mediação para estudante.");
                         // método solicitando mediação
                         mediationStudent(scan, studentService);
-
                         break;
+                    case 5:
+                    System.out.println("Você escolheu encerrar o programa. Até breve!");
+                    return;
+
                     default:
-                        System.out.println("Você está encerrando o menu.");
-                     }
+                        System.out.println("Opção inválida, tente novamente.");
                 }
+            }
+        }
+            
 
             private static void addStudent(Scanner scan, StudentDAO studentDAO) {
                 //add Registro do aluno(RA)
@@ -159,7 +175,7 @@ public class SystemMenu{
 
                 //Inserindo no banco de dados
                 try{
-                Student student = new Student.StudentBuilder(ra,name, cpf, dateBirthStr)
+                Student student = new Student.StudentBuilder(ra,name, cpf, dateBirth)
                         .city(city)
                         .serie(serie)
                         .team(team)
@@ -167,8 +183,9 @@ public class SystemMenu{
                         .build();
 
                 //StudentDAO studentDAO = new StudentDAO();
-                StudentDAO.insertStudent(student);
-                System.out.println("Aluno cadastrado com sucesso!");
+                studentDAO.insertStudent(student);
+                
+                System.out.println("Aluno cadastrado com sucesso!" );
             
 
                 //Exibindo informações
@@ -184,15 +201,124 @@ public class SystemMenu{
               
         }
 
-            public static void updateStudent(){
+            public void updateStudent(Scanner scan, Student student, StudentDAO studentDAO){
+                    System.out.println("Atualizando dados de : " + student.getName());
+                    
+                    if(student != null){
+                        System.out.println("Estudante encontrado: " + student.getName());
 
+                        boolean continuar = true;
+
+                        while(continuar){
+
+                            System.out.println("Escolha o campos que deseja atualizar:");
+                                    System.out.println("1. Nome");
+                                    System.out.println("2. Data de Nascimento");
+                                    System.out.println("3. Cidade");
+                                    System.out.println("4. Serie");
+                                    System.out.println("5. Turma");
+                                    System.out.println("6. Telefone");
+                                    System.out.println("7. Todos os dados");
+                                    System.out.println("Digite a opção escolhida:");
+    
+                                    String opcao = scan.nextLine();
+
+                                    switch (opcao) {
+                                        case "1":
+                                            System.out.println("Novo nome: ");
+                                            student.setName(scan.nextLine());
+                                            break;
+                                        case "2":
+                                            System.out.println("Nova data de nascimento ( favor digitar no formato dia/mês/ano):");
+                                            String data = scan.nextLine();
+                                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                            student.setDateBirth(LocalDate.parse(data, formatter));
+                                            break;
+                                        case "3":
+                                            System.out.println("Nova cidade:");
+                                            student.setCity(scan.nextLine());
+                                            break;
+                                        case "4":
+                                            System.out.println("Nova série:");
+                                            student.setSerie(scan.nextLine());
+                                            break;
+                                        case "5":
+                                            System.out.println("Nova turma: ");
+                                            student.setTeam(scan.nextLine());
+                                            break;
+                                        case "6":
+                                            System.out.println("Novo telefone:");
+                                            student.setFone(scan.nextLine());
+                                            break;
+                                        case "7":
+                                            System.out.println("Novo nome: ");
+                                            student.setName(scan.nextLine());
+
+                                            System.out.println("Nova data de nascimento ( favor digitar no formato dia/mês/ano):");
+                                            String novaData = scan.nextLine();
+
+                                            DateTimeFormatter formatar = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                            try{
+                                                LocalDate dataConvertida = LocalDate.parse(novaData,formatar);
+                                                student.setDateBirth(dataConvertida);
+                                            }catch(DateTimeParseException e){
+                                                System.out.println("Formato de data inválido. Use DD/MM/AAAA");
+                                                return;
+                                            }
+
+                                                System.out.println("Nova cidade:");
+                                                student.setCity(scan.nextLine());
+
+                                                System.out.println("Nova série:");
+                                                student.setSerie(scan.nextLine());
+
+                                                System.out.println("Nova turma: ");
+                                                student.setTeam(scan.nextLine());
+
+                                                System.out.println("Novo telefone:");
+                                                student.setFone(scan.nextLine());
+                                                break;
+                                                          
+                                        default:
+                                        System.out.println("Opção inválida.");
+                                        return;                                           
+                                    }
+
+                        }
+                            studentDAO.update(student);
+                            System.out.println("Atualização concluída!");
+                            System.out.println(student.getName());
+                            }
+                    }
+                                         
+                    
+            private void deleteStudent(){
+                Scanner scan = new Scanner(System.in);
+
+                System.out.println(" Digite o RA do estudante que deseja excluir do sistema: ");
+                String ra = scan.nextLine();
+
+                try{
+                    Student student = studentService.searchStudentByRa(ra);
+
+                    System.out.println("Estudante encontrado: " + student.getName() + " da turma " +student.getSerie() +  student.getTeam()+".");
+                    System.out.println("Deseja excluir os dados deste estudante? Digite 'SIM' para excluir ou 'NÃO' para não excluir.");
+
+                            String escolha = scan.nextLine().trim().toLowerCase();
+
+                            if(escolha.equals("s") || escolha.equals("sim")){
+                                studentService.deleteStudentData(ra);
+                                System.out.println("Cadastro do estudante excluído com sucesso.");
+                            }else{
+                            System.out.println("Estudante não encontrado, favor confirmar os dados para nova solicitação.");
+                            }
+                }catch (RuntimeException e){
+                    System.out.println("Erro: " + e.getMessage());
+
+                }
+                scan.close();
             }
-            public static void deleteStudent(){
 
-
-
-            }
-        @Autowired
         private EmailService emailService;
 
             public void mediationStudent(Scanner scan, StudentService studentService){

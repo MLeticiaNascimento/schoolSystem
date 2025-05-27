@@ -1,4 +1,4 @@
-package com.schoolApplication;
+package com.schoolApplication.test;
 
 import com.schoolApplication.service.EmailService;
 import com.schoolApplication.dto.RequestDto;

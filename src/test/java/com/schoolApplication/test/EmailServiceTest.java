@@ -1,8 +1,8 @@
-package com.schoolApplication;
-
+package com.schoolApplication.test;
 
 import com.schoolApplication.dto.RequestDto;
 import com.schoolApplication.service.EmailService;
+import com.schoolApplication.SchoolSystemApplication;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

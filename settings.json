@@ -1,0 +1,27 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+  
+    "files.exclude": {
+      "**/bin": true,
+      "**/target": true,
+      "**/.classpath": true,
+      "**/.project": true,
+      "**/.settings": true,
+      "**/*.class": true,
+      "**/*.log": true,
+      "**/.idea": true,
+      "**/*.iml": true
+    },
+    
+    "java.project.sourcePaths":[
+      "src/main/java"
+    ],
+    "java.project.outputPath": "target/classes",
+    
+    "java.project.referencedLibraries": [
+    "target/dependency/*.jar"
+  ]
+
+ }
+  
+

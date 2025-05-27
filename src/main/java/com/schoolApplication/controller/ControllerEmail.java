@@ -23,13 +23,7 @@ public class ControllerEmail {
     // o Spring vai mapear o Json para o RequestDto
     @PostMapping
     public String openCall(@RequestBody RequestDto requestDto){
-
-        String bodyEmail = "Novo chamado de %s (%s): %s".formatted(
-                requestDto.getName(),
-                requestDto.getLicense(),
-                requestDto.getMsg()
-        );
-        
+               
         emailService.sendEmail(requestDto);
 
         return "Email enviado com sucesso!";

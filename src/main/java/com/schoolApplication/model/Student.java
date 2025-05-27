@@ -3,8 +3,6 @@ package com.schoolApplication.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,8 +14,14 @@ public class Student {
 
         @Id
         @Column(unique=true, nullable = false)
-
-        private String ra, name, cpf, fone, city, serie, team;
+        private String ra;
+        
+        private String cpf;
+        private String name;
+        private String fone;
+        private String city;
+        private String serie;
+        private String team;
         private LocalDate dateBirth;
         
         //construtor
@@ -47,6 +51,29 @@ public class Student {
         public String getTeam() {return team;}
         public String getFone() { return fone;}
 
+        public void setName(String name){
+            this.name=name;
+        }
+        public void setCpf(String cpf){
+            this.cpf=cpf;
+        }
+        public void setDateBirth(LocalDate dateBirth){
+            this.dateBirth = dateBirth;
+        }
+        public void setCity( String city){
+            this.city = city;
+        }
+        public void setSerie(String serie){
+            this.serie = serie;
+        }
+        public void setTeam(String team){
+            this.team = team;
+        }
+        public void setFone(String fone){
+            this.fone = fone;
+        }
+    
+
 
         //Classe Builder interna
         public static class StudentBuilder {
@@ -57,7 +84,7 @@ public class Student {
 
 
             //Construtor do Builder define a obrigatoriedade
-            public StudentBuilder(String ra, String name, String cpf, String dateBirthStr) {
+            public StudentBuilder(String ra, String name, String cpf, LocalDate dateBirth) {
                 if (name == null || name.isEmpty()) {
                     throw new IllegalArgumentException(" O campo 'Nome' é obrigatório");
                 }
@@ -67,12 +94,11 @@ public class Student {
                 if (cpf == null){
                     throw new IllegalArgumentException ("O campo 'CPF' é obrigatório e deve ser válido.");
                 }
-                if(dateBirthStr == null || dateBirthStr.isEmpty()) {
+                if(dateBirth == null ) {
                     throw new IllegalArgumentException("O campos 'data de nascimento' é obrigatório.");
                 }
 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                this.dateBirth = LocalDate.parse(dateBirthStr, formatter);
+                this.dateBirth = dateBirth;
                 this.name = name;
                 this.ra = ra;
                 this.cpf = cpf;

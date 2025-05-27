@@ -1,4 +1,4 @@
-package com.schoolApplication;
+package com.schoolApplication.test;
 
 import com.schoolApplication.repository.ConnectionBD;
 import java.sql.Connection;

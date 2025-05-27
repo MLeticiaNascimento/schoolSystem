@@ -16,12 +16,17 @@ public class EmailService {
     public void sendEmail (RequestDto dto){
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom(dto.getEmail());
+        message.setFrom("sistema.escola@gmail.com");
+        message.setReplyTo(dto.getEmail());
         message.setTo("equipe.assessoria@email.com");
-        message.setSubject("Nova solicitaçõa de suporte");
-        message.setText("Nome: " + dto.getName() +
-                        "\nE-mail: " + dto.getEmail() +
-                        "\nMensagem: " + dto.getMsg());
+        message.setSubject("Nova solicitação de mediação.");
+        
+        String bodyEmail = "Nome: " + dto.getName() +
+                            "\nEmail: "+ dto.getEmail() +
+                            "\nMatrícula do servidor: " + dto.getLicense() +
+                            "\nMensagem: " + dto.getMsg();
+                            
+        message.setText(bodyEmail);
 
         mailSender.send(message);
     } 
