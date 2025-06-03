@@ -1,7 +1,8 @@
 package com.schoolApplication.test;
 
-import com.schoolApplication.repository.ConnectionBD;
 import java.sql.Connection;
+
+import com.schoolApplication.legacy.ConnectionBD;
 
 public class TestConexao {
 

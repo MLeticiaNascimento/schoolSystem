@@ -1,0 +1,40 @@
+# Arquivo de ambiente 
+.env
+
+# IDEs e configurações do VS Code
+.vscode/
+.settings/
+.settings.json
+
+# Build do Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+
+# Arquivos temporários do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de backup
+*.bak
+*.swp
+
+# Ignorar arquivos do IntelliJ, caso use
+.idea/
+*.iml
+
+# Dependências baixadas (caso use Gradle)
+.gradle/
+build/
+
+# Node.js (caso use alguma lib JS em paralelo)
+node_modules/
+
+# Outras pastas geradas automaticamente
+bin/
+out/
+
+#Arquivos antigos
+/src/main/java/com/schoolApplication/legacy/
