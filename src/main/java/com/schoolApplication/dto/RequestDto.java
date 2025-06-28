@@ -1,5 +1,6 @@
 package com.schoolApplication.dto;
 
+import java.time.LocalDate;
 
 public class RequestDto{
     private String name;

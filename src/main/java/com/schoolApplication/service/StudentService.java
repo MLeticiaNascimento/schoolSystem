@@ -1,41 +1,21 @@
 package com.schoolApplication.service;
 
-import org.springframework.stereotype.Service;
-import com.schoolApplication.repository.StudentRepository;
 import com.schoolApplication.model.Student;
 
 import java.util.List;
 
-@Service
-public class StudentService {
 
-    private final StudentRepository repository;
+public interface StudentService {
 
-    public StudentService(StudentRepository repository){
-        this.repository = repository;
-    }
+    Student createStudent(Student student);
 
-    public Student createStudent(Student student){
-        return repository.save(student);
-    }
+    Student searchStudentByName(String name);
 
-    public Student searchStudentByName(String name){
-        return repository.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Estudante não encontrado."));
-    }
+    Student searchStudentByRa(String ra);
 
-    public Student searchStudentByRa(String ra){
-        return repository.findByRa(ra)
-                .orElseThrow(() -> new RuntimeException("Estudante não encontrado"));
-    }
+    Student updateStudent(String ra, Student updatedStudent);
 
-    public List<Student> getAllStudents(){
-        return repository.findAll();
-    }
+    List<Student> getAllStudents();
 
-    public void deleteStudent(String ra){
-        repository.deleteById(ra);
-    }
-
-    
+    void deleteStudent(String ra);
 }

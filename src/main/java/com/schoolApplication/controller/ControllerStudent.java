@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-
+import java.util.Map;
 
 
 
@@ -59,4 +59,16 @@ public class ControllerStudent {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{ra}")
+    public ResponseEntity<Student> updateStudent(@PathVariable String ra, @RequestBody Student updatedStudent) {
+        Student student = studentService.updateStudent(ra, updatedStudent);
+        return ResponseEntity.ok(student);
+}
+
+
+    @PostMapping("/{ra}/mediacao")
+    public ResponseEntity<?> solicitarMediacao(@PathVariable String ra, @RequestBody Map<String, String> body) {
+            String matricula = body.get("matricula");
+            return ResponseEntity.ok("Mediação solicitada com sucesso!");
+    }
 }

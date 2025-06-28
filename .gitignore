@@ -38,3 +38,6 @@ out/
 
 #Arquivos antigos
 /src/main/java/com/schoolApplication/legacy/
+
+.vscode/launch.json
+
